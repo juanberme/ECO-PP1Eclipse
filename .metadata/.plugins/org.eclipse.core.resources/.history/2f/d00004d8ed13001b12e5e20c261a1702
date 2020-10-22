@@ -1,0 +1,69 @@
+package view;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.zip.InflaterInputStream;
+
+public class TCPSingleton extends Thread{
+	
+	private static TCPSingleton unica;
+	
+	public static TCPSingleton getInstance() {
+		if(unica == null) {
+			unica = new TCPSingleton();
+			//unica.start();
+		}
+		return unica;
+	}
+	
+	private TCPSingleton(){}
+	
+	private onMessageListener observer;
+	private ServerSocket server;
+	//private ArrayList<Session> sesiones;
+	private Session sesiones;
+	
+	public void setObserver(onMessageListener observer) {
+		this.observer = observer;
+	}
+	
+	public void run() {
+		try {
+			
+			server = new ServerSocket(5000);
+			//sesiones = new Session();
+			while(true) {
+				System.out.println("Waiting client...");
+				Socket socket = server.accept();
+				sesiones = new Session(socket);
+				sesiones.setObserver(observer);
+				sesiones.start();
+				//sesiones.add(session);
+				System.out.println("Successfully connected");
+			}
+			
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public Session getSesiones() {
+		// TODO Auto-generated method stub
+		return this.sesiones;
+	}
+	
+	
+	
+}

@@ -2,6 +2,8 @@ package view;
 
 public interface onMessageListener {
 
-	void onMessage( String msg);
+	void onMessage(Session session, String msg);
+	
+	
 	
 }

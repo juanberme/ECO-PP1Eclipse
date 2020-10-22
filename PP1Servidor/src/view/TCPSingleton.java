@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.zip.InflaterInputStream;
 
 public class TCPSingleton extends Thread{
@@ -27,6 +28,7 @@ public class TCPSingleton extends Thread{
 	
 	private onMessageListener observer;
 	private ServerSocket server;
+	private ArrayList<Session> sesiones;
 	
 	public void setObserver(onMessageListener observer) {
 		this.observer = observer;
@@ -34,16 +36,21 @@ public class TCPSingleton extends Thread{
 	
 	public void run() {
 		try {
-			
+			sesiones = new ArrayList<Session>();
 			server = new ServerSocket(5000);
-			
-			while(true) {
+			//sesiones = new Session();
+			while(sesiones.size()<2) {
 				System.out.println("Waiting client...");
-				Socket servidor = server.accept();
-				Session session = new Session(servidor);
-				session.setObserver(observer);
-				session.start();
+				Socket socket = server.accept();
+				Session sesion = new Session(socket);
+				sesion.setObserver(observer);
+				sesion.start();
+				sesiones.add(sesion);
 				System.out.println("Successfully connected");
+				
+				//
+				
+				
 			}
 			
 			
@@ -53,6 +60,11 @@ public class TCPSingleton extends Thread{
 			e.printStackTrace();
 		}
 		
+	}
+
+	public ArrayList<Session> getSesiones() {
+		// TODO Auto-generated method stub
+		return this.sesiones;
 	}
 	
 	
