@@ -17,10 +17,16 @@ public class Session extends Thread{
 	private BufferedWriter writer;
 	private onMessageListener observer;
 	private String id;
+	private Coordenada coordenada;
 	
 	public Session(Socket socket) {
 		this.servidor = socket;
 		this.id = UUID.randomUUID().toString();
+		coordenada = new Coordenada(0,0);
+	}
+	
+	public void setObserver(onMessageListener observer) {
+		this.observer = observer;
 	}
 	
 	@Override
@@ -36,7 +42,8 @@ public class Session extends Thread{
 			while(true) {
 				String linea = reader.readLine();
 				System.out.println(linea);
-				observer.onMessage(linea);
+				observer.onMessage(this, linea);
+				
 				
 			}
 		} catch (IOException e) {
@@ -60,12 +67,19 @@ public class Session extends Thread{
 				).start();
 	}
 	
-	public void setObserver(onMessageListener observer) {
-		this.observer = observer;
-	}
+	
 	
 	public String getID() {
 		return this.id;
+	}
+	
+	public Coordenada getCoordenada() {
+		return this.coordenada;
+	}
+
+	public void setCoordenada(Coordenada coordenada) {
+		this.coordenada = coordenada;
+		
 	}
 
 }
