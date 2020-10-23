@@ -1,9 +1,0 @@
-package view;
-
-public interface onMessageListener {
-
-	void onMessage(Session session, String linea);
-
-	void onMessage(Session session, String linea);
-	
-}
