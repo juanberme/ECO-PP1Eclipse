@@ -14,8 +14,9 @@
 <fullyQualifiedTypeName name="java.util.UUID"/>
 <fullyQualifiedTypeName name="view.Coordenada"/>
 <fullyQualifiedTypeName name="view.Session"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.util.Observer"/>
 <fullyQualifiedTypeName name="processing.core.PApplet"/>
 <fullyQualifiedTypeName name="com.google.gson.Gson"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="view.Disparo"/>
 </qualifiedTypeNameHistroy>
