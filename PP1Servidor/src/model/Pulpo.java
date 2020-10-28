@@ -6,13 +6,14 @@ public class Pulpo {
 
 	PApplet app;
 	float px,py, velpX,velpY;
-	int vida;
+	int vida,puntos;
 	
 public Pulpo(float px,float py){
 	super();
 	this.px = px;
 	this.py = py;
 	vida = 5;
+	puntos = 100;
 	
 	this.velpX = (int)(Math.random()*2);
 	this.velpY = (int)(Math.random()*5);

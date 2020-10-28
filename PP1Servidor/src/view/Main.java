@@ -132,6 +132,13 @@ public class Main extends PApplet implements onMessageListener{
 			case 3:
 				//pantalla de juego
 				image (pantalla1,0,0);
+				textSize(18);
+				text("puntos:",100,120);
+				text("puntos:",820,120);
+				text("Jugador 1",30,80);
+				text("jugador 2",1108,80);
+				text("TIEMPO",550,80);
+				text("0.0",570,100);
 
 				for (int i = 0; i < ast.size(); i++) {
 					Asteroides as = ast.get(i);
@@ -175,6 +182,9 @@ public class Main extends PApplet implements onMessageListener{
 			case 5: 
 				//ganador
 				image (ganador,0,0);
+				textSize(24);
+				text("ganador 1",555,350);
+				text("ganador 2",555,350);
 				break;
 			
 		}
