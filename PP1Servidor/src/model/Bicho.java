@@ -7,14 +7,15 @@ public class Bicho {
 
 	PApplet app;
 	float bx,by, velbX,velbY;
-	int vida;
+	int vida,puntos;
 	
 public Bicho(float px,float py){
 	super();
 	//this.bx = bx;
 	//this.by = by;
 	
-	vida = 8;
+	vida = 3;
+	puntos = 50;
 	
 	
 

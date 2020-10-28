@@ -15,7 +15,7 @@ public Asteroides(float ax,float ay){
 	super();
 	this.ax = ax;
 	this.ay = ay;
-	resistencia = 12;
+	resistencia = 8;
 	
 	puntos = 200;
 	
