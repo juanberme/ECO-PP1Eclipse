@@ -44,8 +44,15 @@ public class Main extends PApplet implements onMessageListener{
 	private ArrayList <Pulpo> pulp;
 	private ArrayList<Disparo> disparos;
 	private TCPSingleton tcp;
-	int contador = 30;
+
+	int contador =200;
 	Coordenada c;
+
+	private int segundos;
+	private int x;
+	private int y;
+	private int vel;
+
 	
 	public void settings() {
 		size(1200,700);
@@ -54,7 +61,7 @@ public class Main extends PApplet implements onMessageListener{
 	}
 	
 	public void setup() {
-		pantalla = 4;
+		pantalla = 3;
 		
 		//imagenes
 		menu1 = loadImage ("images/menu1.png");
@@ -78,6 +85,8 @@ public class Main extends PApplet implements onMessageListener{
 		tcp = TCPSingleton.getInstance();
 		tcp.setObserver(this);
 		tcp.start();
+		
+		//segundos = 60;
 		
 		
 		//crear asteroides
@@ -154,7 +163,7 @@ public class Main extends PApplet implements onMessageListener{
 			case 1:
 				//para ir a juego
 				image (menu1,0,0);
-				
+				pantalla = 3;
 				break;
 			case 2:
 				//para ir a instruciones
@@ -169,7 +178,9 @@ public class Main extends PApplet implements onMessageListener{
 				text("puntos:",820,120);
 				text("Jugador 1",30,80);
 				text("jugador 2",1108,80);
+				
 				text("TIEMPO",550,80);
+
 				text(contador,570,100);
 			if(contador == 0) {
 				pantalla = 5;
@@ -205,6 +216,7 @@ public class Main extends PApplet implements onMessageListener{
 				//crear navecita 1
 				for(int i = 0; i < sesiones.size(); i++) {
 					if(i == 0) {
+
 						//Coordenada c = sesiones.get(i).getCoordenada();
 						 c = sesiones.get(i).getCoordenada();
 						image(naveAzul,c.getX(), c.getY() , 100, 100);
@@ -213,15 +225,28 @@ public class Main extends PApplet implements onMessageListener{
 						//Coordenada c = sesiones.get(i).getCoordenada();
 						 c = sesiones.get(i).getCoordenada();
 						image(naveVioleta,c.getX(), c.getY() , 100, 100);
-					}	
-				}
+					}	else if(i == 1) {
+						/*Coordenada c = sesiones.get(i).getCoordenada();
+						image(naveVioleta,c.getX(), c.getY() , 100, 100);*/
+						image(naveVioleta,x, y , 100, 100);
+					}
+
+						/*Coordenada c = sesiones.get(i).getCoordenada();
+						image(naveAzul,c.getX(), c.getY() , 100, 100);*/
+						image(naveAzul,x, y , 100, 100);
+					}
+		
+
+				
 				//crear disparos y que desaparezcan al llegar al borde de abajo del mapa
 				for(int i = 0; i<disparos.size(); i++) {
 					Disparo d = disparos.get(i);
+					
 					ellipse(d.getX(), d.getY(), 20, 20);
-					d.setY(d.getY()+d.getVel());
-					if(d.getY() > height || d.getX() > width || d.getX() <  0 || d.getY() < 0) {
-						disparos.remove(d);
+					d.setY(d.getY()-d.getVel());
+					
+					if(y > height || x > width || x <  0 || y < 0) {
+						disparos.remove(i);
 					}
 					//si las balas golpean a un pulpo, que le haga daño
 					for(int p = 0; p < pulp.size(); p++) {
@@ -259,6 +284,8 @@ public class Main extends PApplet implements onMessageListener{
 					}
 				}
 				
+				tiempo();
+				
 				break;
 			case 4: 
 				//instrucciones
@@ -278,19 +305,66 @@ public class Main extends PApplet implements onMessageListener{
 
 	}
 
-	public void onMessage(Session s, String msg) {
+	/*public void onMessage(Session s, String msg) {
 		System.out.println("Sesion:"+s.getID()+","+msg);
 		Gson gson = new Gson();
 		Coordenada coorRecibida = gson.fromJson(msg, Coordenada.class);
 		s.setCoordenada(coorRecibida);
 		/*x = coorRecibida.getX();
-		y = coorRecibida.getY();*/
+		y = coorRecibida.getY();
+	}*/
+
+	public void mousePressed() {
+	/*Disparo d = new Disparo(5, mouseX, mouseY);
+	disparos.add(d);*/
+	}
+	
+	public void tiempo() {
+		new Thread(
+				
+				()->{
+					while(true) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						segundos = segundos - 1;
+						if(segundos == 0) {
+							segundos = 0;
+						}
+						
+					}
+				}
+				
+				).start();
 	}
 
-public void mousePressed() {
-	Disparo d = new Disparo(5, mouseX, mouseY);
-	disparos.add(d);
-}
+	@Override
+	public void coorReceived(Coordenada coor) {
+		this.x = coor.getX();
+		this.y = coor.getY();
+		
+	}
+
+	@Override
+	public void shootReceived(Disparo shoot) {
+		// TODO Auto-generated method stub
+		disparos.add(shoot);
+		
+		this.vel = shoot.getVel();
+	}
+	
+	public void disparos() {
+		
+	}
+
+	
+	
+
+
 
 
 }

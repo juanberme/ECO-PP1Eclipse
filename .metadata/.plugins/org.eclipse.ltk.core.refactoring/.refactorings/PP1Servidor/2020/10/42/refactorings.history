@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename type &apos;view.onMessage&apos; to &apos;onMessageListener&apos;&#x0D;&#x0A;- Original project: &apos;PP1Servidor&apos;&#x0D;&#x0A;- Original element: &apos;view.onMessage&apos;&#x0D;&#x0A;- Renamed element: &apos;view.onMessageListener&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;onMessage&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;view{onMessage.java[onMessage" matchStrategy="1" name="onMessageListener" qualified="false" references="true" similarDeclarations="false" stamp="1602532940576" textual="false" version="1.0"/>
-</session>
