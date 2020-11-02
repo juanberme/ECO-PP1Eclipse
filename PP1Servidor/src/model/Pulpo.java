@@ -18,7 +18,10 @@ public Pulpo(float px,float py){
 	this.velpX = (int)(Math.random()*2);
 	this.velpY = (int)(Math.random()*5);
 	
-	
+	if(velpX == 0 && velpY == 0) {
+		velpX = 1;
+		velpY = 1;
+	}
 	
 	
 }
@@ -38,6 +41,24 @@ public Pulpo(float px,float py){
 		}
 		
 	}
+	
+	
+	public int getVida() {
+	return vida;
+}
+
+public void setVida(int vida) {
+	this.vida = vida;
+}
+
+public int getPuntos() {
+	return puntos;
+}
+
+public void setPuntos(int puntos) {
+	this.puntos = puntos;
+}
+
 
 	public PApplet getApp() {
 		return app;

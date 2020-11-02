@@ -22,9 +22,12 @@ public Bicho(float px,float py){
 	this.bx = (int)(Math.random()*1000);
 	this.by = (int)(Math.random()*700);
 	this.velbX = (int)(Math.random()*5);
-	this.velbY = (int)(Math.random()*5);
+	this.velbY = (int)(Math.random()*5)-2;
 	
-	
+	if(velbX == 0 && velbY == 0) {
+		velbX = 1;
+		velbY = 1;
+	}
 	
 	
 }

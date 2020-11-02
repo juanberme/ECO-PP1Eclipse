@@ -21,7 +21,7 @@ public Asteroides(float ax,float ay){
 	
 	
 	this.velX = (int)(Math.random()*10)-5;
-	this.velY = (int)(Math.random()*10)-5;
+	this.velY = (int)(Math.random()*5);
 	
 	if(velX == 0 && velY == 0) {
 		velX = 1;
@@ -37,11 +37,12 @@ public Asteroides(float ax,float ay){
 		
 		
 		if( ax > 1200){
-			ax = 50;
+			ax = 0;
 		}
 		
 		if(ay > 700 ){
-				ay = 50  ;
+				ay = 0 ;
+		
 		}
 		
 		

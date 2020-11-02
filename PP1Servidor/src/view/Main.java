@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import model.Asteroides;
 import model.Bicho;
 import model.Pulpo;
+import model.naves;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -30,7 +31,8 @@ public class Main extends PApplet implements onMessageListener{
 	private PImage naveRosa;
 	private PImage vidaAzul;
 	private PImage vidaVioleta;
-
+	private naves vidanave;
+	int puntaje;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		PApplet.main("view.Main");
@@ -42,7 +44,8 @@ public class Main extends PApplet implements onMessageListener{
 	private ArrayList <Pulpo> pulp;
 	private ArrayList<Disparo> disparos;
 	private TCPSingleton tcp;
-	
+	int contador = 30;
+	Coordenada c;
 	
 	public void settings() {
 		size(1200,700);
@@ -51,7 +54,7 @@ public class Main extends PApplet implements onMessageListener{
 	}
 	
 	public void setup() {
-		pantalla = 3;
+		pantalla = 4;
 		
 		//imagenes
 		menu1 = loadImage ("images/menu1.png");
@@ -116,7 +119,25 @@ public class Main extends PApplet implements onMessageListener{
 		bic.add(new  Bicho(1000,450));	
 		
 		
-		
+		 new Thread( 
+				 () -> {
+				 while (contador > 0) {
+                        if (pantalla == 3 ) {
+                           contador --;
+                           
+                          } 
+                     
+                    
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                      
+                    }
+                	
+				 } 
+				 }
+           ).start();
 		
 	}
 	
@@ -133,7 +154,7 @@ public class Main extends PApplet implements onMessageListener{
 			case 1:
 				//para ir a juego
 				image (menu1,0,0);
-				
+				pantalla = 3;
 				break;
 			case 2:
 				//para ir a instruciones
@@ -149,22 +170,25 @@ public class Main extends PApplet implements onMessageListener{
 				text("Jugador 1",30,80);
 				text("jugador 2",1108,80);
 				text("TIEMPO",550,80);
-				text("0.0",570,100);
-
+				text(contador,570,100);
+			if(contador == 0) {
+				pantalla = 5;
+			}
+//crear asteroides
 				for (int i = 0; i < ast.size(); i++) {
 					Asteroides as = ast.get(i);
 					as.mover();
 					
 					image(aste, as.getAx(), as.getAy(), 150,150);
 				}
-				
+				//crear pulpo 
 				for (int o = 0; o < pulp.size(); o++) {
 					Pulpo pu = pulp.get(o);
 					pu.mover();
 					
 					image(pulpito,pu.getPx(), pu.getPy(), 80, 80);
 				}
-			
+			//crear bicho
 				for (int n = 0; n < bic.size(); n++) {
 					Bicho bi = bic.get(n);
 					bi.mover();
@@ -178,17 +202,20 @@ public class Main extends PApplet implements onMessageListener{
 					Session sesion = tcp.getSesiones().get(i);
 				}*/
 				ArrayList<Session> sesiones = tcp.getSesiones();
-				
+				//crear navecita 1
 				for(int i = 0; i < sesiones.size(); i++) {
 					if(i == 0) {
-						Coordenada c = sesiones.get(i).getCoordenada();
+						//Coordenada c = sesiones.get(i).getCoordenada();
+						 c = sesiones.get(i).getCoordenada();
 						image(naveAzul,c.getX(), c.getY() , 100, 100);
-					}else if(i == 1) {
-						Coordenada c = sesiones.get(i).getCoordenada();
+						
+					}else if(i == 1) { //crear navecita 2
+						//Coordenada c = sesiones.get(i).getCoordenada();
+						 c = sesiones.get(i).getCoordenada();
 						image(naveVioleta,c.getX(), c.getY() , 100, 100);
-					}
-					
+					}	
 				}
+				//crear disparos y que desaparezcan al llegar al borde de abajo del mapa
 				for(int i = 0; i<disparos.size(); i++) {
 					Disparo d = disparos.get(i);
 					ellipse(d.getX(), d.getY(), 20, 20);
@@ -196,15 +223,22 @@ public class Main extends PApplet implements onMessageListener{
 					if(d.getY() > height || d.getX() > width || d.getX() <  0 || d.getY() < 0) {
 						disparos.remove(d);
 					}
+					//si las balas golpean a un pulpo, que le haga daño
 					for(int p = 0; p < pulp.size(); p++) {
 						Pulpo pul = pulp.get(p);
 						if(dist(pul.getPx()+40, pul.getPy()+40, d.getX(), d.getY())<40) {
-							pulp.remove(p);
+							pul.setVida(pul.getVida()-1) ;
+							if(pul.getVida() == 0 ) {
+									pulp.remove(p);
 							disparos.remove(i);
+								
+							}
+						
 							
 						}
+						
 					}
-					
+					//si le hace daño a un bicho que lo golpee
 					for(int b = 0; b < bic.size(); b++) {
 						Bicho biho = bic.get(b);
 						if(dist(biho.getBx()+40, biho.getBy()+40, d.getX(), d.getY())<40) {
@@ -213,13 +247,14 @@ public class Main extends PApplet implements onMessageListener{
 							
 						}
 					}
-					
+					//si le hace daño a un bicho que le baje resistencia
 					for(int a = 0; a < ast.size(); a++) {
 						Asteroides asteroide = ast.get(a);
 						if(dist(asteroide.getAx()+75, asteroide.getAy()+75, d.getX(), d.getY())<75) {
 							ast.remove(a);
 							disparos.remove(i);
-							
+						
+						
 						}
 					}
 				}
